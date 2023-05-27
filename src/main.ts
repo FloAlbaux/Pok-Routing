@@ -5,10 +5,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import App from './App.vue'
 import HomeView from './View/HomeView.vue'
 import AboutView from './View/AboutView.vue'
+import PokemonView from './View/PokemonView.vue'
 
 const routes = [
     { path: '/', component: HomeView },
     { path: '/about', component: AboutView },
+    { path: '/pokemon/:id', component: PokemonView}
   ]
   
   // 3. Create the router instance and pass the `routes` option

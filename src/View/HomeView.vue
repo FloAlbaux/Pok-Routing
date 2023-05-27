@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
+import { RouterLink, useRouter } from 'vue-router';
 
 let data = ref([]);
+const router = useRouter();
 
 onBeforeMount(() => {
   fetch("https://pokeapi.co/api/v2/pokemon?limit=100")
@@ -9,12 +11,29 @@ onBeforeMount(() => {
     .then(output => (data.value = output.results));
 })
 
+function handleClick(name: String) {
+    router.push(`/pokemon/${name}`)
+}
+
+function getIdFormUrl(url: String): number {
+    const regex = /\/(\d+)\/$/;
+    const match = url.match(regex);
+    const id = match ? match[1] : "";
+
+    return parseInt(id);
+}
+
 </script>
 
 
 <template>
     <ul class="list">
-      <li class="poke-box" v-for="pokemon in data" :key="pokemon.url">{{ pokemon.name }}</li>
+      <li class="poke-box" 
+      v-for="pokemon in data" 
+      :key="getIdFormUrl(pokemon.url)"
+      @click="handleClick(pokemon.name)">
+        {{ pokemon.name }}
+    </li>
     </ul>
 </template>
 
