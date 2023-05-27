@@ -1,16 +1,22 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
+import Pokeball from '../components/PokeBall.vue'
 
 const pokemon = ref({});
+const isCatched = ref(false);
 const route = useRoute();
+
+function hasBeenCatched() {
+    isCatched.value=true;
+}
 
 onBeforeMount(() => {
     const name = route.params.id;
 
     fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
         .then(response => response.json())
-        .then(output => (pokemon.value = output));//pokemon.value = output.results));
+        .then(output => (pokemon.value = output));
     
 })
 
@@ -26,14 +32,18 @@ onBeforeMount(() => {
             <p>Height : {{ pokemon.height }}</p>
         </div>
         <img :src="pokemon.sprites.back_default"/>
+        <Pokeball @pokemon-catched="hasBeenCatched" :rarety="Math.floor(Math.random() * 101)"></Pokeball>
     </div>
+    <h2 v-if="isCatched">Attrapé !!</h2>
+
+    
 </template>
 
 <style scoped>
   .detail {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-around;
     background-color: #f5f5f5;
     padding: 10px;
     border-radius: 5px;
